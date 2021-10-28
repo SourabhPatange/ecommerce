@@ -1,0 +1,205 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../font/css/all.css">
+    <script>
+        var categories = ["select categories", "fashion", "electronics", "footwear"];
+        var fashion=["select fashion","shirt","jacket","jeans"];
+        var electronics=["select electronics","jbl","tv","watch"];
+        var footwear=["select footwear","nike casual","sport shoes","sandal"];
+        var products=[];
+        var cartitem=[];
+        var data = [
+            { name: "shirt", price: "500", photo: "../assets/images/shirts.jpg" },
+            { name: "jeans", price: "800", photo: "../assets/images/jeans.jpg" },
+            { name: "jacket", price: "5500", photo: "../assets/images/jacket.jpg" },
+            { name: "jbl", price: "9500", photo: "../assets/images/BOSE.jpeg" },
+            { name: "watch", price: "7800", photo: "../assets/images/Smart Watch.jpeg" },
+            { name: "tv", price: "5800", photo: "../assets/images/TV.jfif" },
+            { name: "sandal", price: "500", photo: "../assets/images/sandals.jpg" },
+            { name: "nick causal", price: "800", photo: "../assets/images/nike-casual-shoes.jpg" },
+            { name: "sport shoes", price: "1200", photo: "../assets/images/sport shoes.jpg" }
+        ]
+
+      
+        function loadproduct(){
+var lstproduct= document.getElementById("lstproduct");
+document.getElementById("lstproduct").innerHTML=""
+for(var item of products){
+var option= document.createElement("option");
+option.text= item;
+lstproduct.appendChild(option)
+}
+        }
+
+        function loadcategories() {
+            var lstcategories = document.getElementById("lstcategories");
+            for (var item of categories) {
+                var option = document.createElement("option");
+                option.text= item;
+               lstcategories.appendChild(option)
+            }
+        }
+        function bodyload(){
+            loadcategories()
+            getcount()
+        }
+        function changecategories(){
+var selectcategories= document.getElementById("lstcategories").value;
+switch (selectcategories) {
+    case "fashion":
+        products = fashion;
+        loadproduct();
+        break;
+        case "electronics":
+        products = electronics;
+        loadproduct();
+        break;
+        case "footwear":
+        products = footwear;
+        loadproduct();
+        break;
+
+    default:
+        products=["select categories"]
+        break;
+}
+        }
+        var searchedproduct;
+        function changeproduct(){
+            var selectproduct= document.getElementById("lstproduct").value;
+         searchedproduct= data.find(function(product){
+               return product.name== selectproduct;
+
+            });
+            document.getElementById("lblname").innerHTML= searchedproduct.name;
+            document.getElementById("lblprice").innerHTML= searchedproduct.price;
+            document.getElementById("pic").src= searchedproduct.photo;
+        }
+        function getcount(){
+            document.getElementById("lblcount").innerHTML= cartitem.length;
+        }
+        function addtocart(){
+            cartitem.push(searchedproduct);
+            alert("item added into cart")
+            getcount()
+        }
+        function loadcartitems(){
+            var tbody= document.getElementById("tbody");
+            tbody.innerHTML=""
+            for(var item of cartitem){
+                var tr= document.createElement("tr")
+                var tdname= document.createElement("td")
+                var tdprice= document.createElement("td")
+                var tdphoto= document.createElement("td")
+                tdname.innerHTML= item.name;
+                tdprice.innerHTML= item.price;
+                var pic= document.createElement("img")
+                pic.src= item.photo;
+                pic.width="50"
+                pic.height="50";
+                tdphoto.appendChild(pic)
+                tr.appendChild(tdname);
+                tr.appendChild(tdprice);
+                tr.appendChild(tdphoto)
+                tbody.appendChild(tr)
+            }
+        }
+    </script>
+</head>
+
+<body class="container-fluid" onload="bodyload()">
+    <header class="bg-dark text-white text-center p-1">
+        <h1><i class="fas fa-shopping-cart"></i> Amazon Shopping</h1>
+    </header>
+
+
+    <div class="row">
+        <div class="col-3">
+            <div>
+                <label class="form-label">select categories</label>
+                <select onchange="changecategories()"  id="lstcategories" class="form-select" >
+
+                </select>
+            </div>
+            <div class="mt-2">
+                <label>select products</label>
+                <select onchange="changeproduct()" class="form-select" id="lstproduct">
+
+                </select>
+            </div>
+
+
+            <div class="card text-center mt-2">
+                <div class="card-header">
+                    <h2 id="lblname"></h2>
+                </div>
+                <div class="card-body">
+                    <img id="pic" width="200" height="200">
+                    <p id="lblprice"></p>
+                </div>
+                <div class="card-footer text-muted">
+                    <div class="d-grid">
+                        <button onclick="addtocart()" class="btn btn-warning"><i class="fas fa-shopping-cart"></i>Add to
+                            Cart</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-5">
+
+        </div>
+        <div class="col-4">
+
+            <!-- Button trigger modal -->
+            <button type="button" onclick="loadcartitems()" class="btn btn-warning" style="margin-left: 160px;" data-bs-toggle="modal"
+                data-bs-target="#exampleModal">
+                [<span id="lblcount"></span>]<i class="fas fa-shopping-cart"></i>Items added
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-hover">
+                                <thead>
+                                    <th>Name</th>
+                                    <th>price</th>
+                                    <th>photo</th>
+                                </thead>
+                                <tbody id="tbody">
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+
+
+
+    <script src="../node_modules/jquery/dist/jquery.js"></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+</body>
+
+</html>
